@@ -1,6 +1,9 @@
 #include <Arduino.h>
 #include "nmea_parser.h"
 
+#include <ADIS16209.h>
+#include <SPI.h>
+
 String nmea = "$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47";
 uint8_t parity;
 
