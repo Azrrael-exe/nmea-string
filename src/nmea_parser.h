@@ -78,7 +78,6 @@ String NMEA::getString(){
   }
   char cadena[5];
   sprintf(cadena, "*%X\n\r", parity);
-  Serial.println(cadena);
   output += cadena;
   return "$" + output;
 }

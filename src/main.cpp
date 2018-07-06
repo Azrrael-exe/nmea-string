@@ -34,6 +34,8 @@ void loop() {
     int INCY = 0;
     INCX = INCL.regRead(XINCL_OUT);
     INCY = INCL.regRead(YINCL_OUT);
+    INCX = INCL.inclineScale(INCX);
+    INCY = INCL.inclineScale(INCY);
     char cadena[20];
     sprintf(cadena, "Inc: %d, %d", INCX, INCY);
     Serial.println(cadena);
@@ -45,7 +47,7 @@ void loop() {
       char cadena[2];
       sprintf(cadena, "%02d", 5);
       parser.setField(7 , cadena);
-      Serial.print("String: ");Serial.println(parser.getString());
+      Serial.print("String: ");Serial.print(parser.getString());
       Serial.print("Raw: ");Serial.println(parser.getRaw());
     }
   }
