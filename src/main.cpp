@@ -11,13 +11,15 @@ ADIS16209 INCL(7,2,4); //ChipSelect,DataReady,Reset Pin Assignments
 
 NMEA parser;
 
-long wd = 0;
+int INCX = 0;
+int INCY = 0;
 
+long wd_imu = 0;
+long wd_rep = 0;
 
 void setup() {
   Serial.begin(115200);
   INCL.configSPI();
-
   delay(100); // Give the part time to start up
   INCL.regWrite(MSC_CTRL,0x6);  // Enable Data Ready on INCL
   delay(20);
@@ -28,28 +30,29 @@ void setup() {
 }
 
 void loop() {
-  if(millis() - wd > 2000){
-    wd = millis();
-    int INCX = 0;
-    int INCY = 0;
+  if(millis() - wd_imu > 100){
+    wd_imu = millis();
     INCX = INCL.regRead(XINCL_OUT);
     INCY = INCL.regRead(YINCL_OUT);
     INCX = INCL.inclineScale(INCX);
     INCY = INCL.inclineScale(INCY);
-    char cadena[20];
-    sprintf(cadena, "Inc: %d, %d", INCX, INCY);
-    Serial.println(cadena);
   }
 
-  for(int i=0; i<nmea.length(); i++){
-    parser.parse(nmea[i]);
-    if(parser.isReady()){
-      char cadena[2];
-      sprintf(cadena, "%02d", 5);
-      parser.setField(7 , cadena);
-      Serial.print("String: ");Serial.print(parser.getString());
-      Serial.print("Raw: ");Serial.println(parser.getRaw());
+  if(millis() - wd_rep > 1000){
+    wd_rep = millis();
+    for(int i=0; i<nmea.length(); i++){
+      parser.parse(nmea[i]);
+      if(parser.isReady()){
+        char cadena[4];
+        sprintf(cadena, "%02u", INCX);
+        parser.setField(7 , cadena);
+        sprintf(cadena, "%02u", INCY);
+        parser.setField(8 , cadena);
+        // Serial.print("String: ");
+        Serial.print(parser.getString());
+        // Serial.print("Raw: ");Serial.println(parser.getRaw());
+      }
     }
   }
-  delay(5000);
+
 }
