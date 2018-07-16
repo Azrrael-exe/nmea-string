@@ -7,7 +7,7 @@
 String nmea = "$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47";
 uint8_t parity;
 
-ADIS16209 INCL(7,2,4); //ChipSelect,DataReady,Reset Pin Assignments
+ADIS16209 INCL(7,2,8); //ChipSelect,DataReady,Reset Pin Assignments
 
 NMEA parser;
 
